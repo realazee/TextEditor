@@ -189,6 +189,13 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 private void addChildrenToQueue(Queue<TrieNode> queue, TrieNode parent) {
 		 // TODO: Implement this method by getting the list of all existing children characters (keys) of the parent
 		 //       node, and then add the corresponding TrieNode to the queue
+		 LinkedList<Character> listOfChildren = new LinkedList<Character>();
+		 listOfChildren.addAll(parent.getValidNextCharacters());
+		 for(int i = 0; i < listOfChildren.size(); i++) {
+			 queue.add(parent.getChild(listOfChildren.get(i)));
+		 }
+		 
+		 
 	 }
 
 
