@@ -146,7 +146,16 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 		 //       Add all of its child nodes to the back of the queue
 		 // Return the list of completions
 		 prefix = prefix.toLowerCase();
-
+		 TrieNode startNode = findStem(prefix);
+		 List<String> suggestions = new LinkedList<String>();
+		 if(startNode == null) {
+			 return null;
+		 }
+		 else {
+			 
+		 }
+		 
+		 
 
 
 		 return null;
