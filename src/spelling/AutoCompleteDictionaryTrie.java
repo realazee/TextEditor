@@ -145,21 +145,39 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 		 //       If it is a word, add it to the completions list
 		 //       Add all of its child nodes to the back of the queue
 		 // Return the list of completions
+
+
+		 
 		 prefix = prefix.toLowerCase();
 		 TrieNode startNode = findStem(prefix);
+		 Queue<TrieNode> queue = new LinkedList<TrieNode>();
+		 queue.add(startNode);
 		 List<String> suggestions = new LinkedList<String>();
+		
 		 if(startNode == null) {
-			 return null;
+			 return suggestions;
 		 }
 		 else {
-			 
+			 while(!queue.isEmpty() && suggestions.size() < numCompletions) {
+				 startNode = queue.remove();
+				 if(startNode != null) {
+					 if(startNode.endsWord()) {
+						 suggestions.add(startNode.getText()); 
+					 }
+					 addChildrenToQueue(queue,startNode);
+					
+				 }
+				
+			 }
+			
+
 		 }
-		 
-		 
+		 return suggestions;
+	
 
-
-		 return null;
 	 }
+	 
+
 
 
 	 /**
@@ -171,24 +189,22 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 private TrieNode findStem(String stem) {
 		 // TODO: Implement this method
 		 // This method should find the "stem" in the Trie, and return the TrieNode of the last letter
-		 // in the stem, if it exists in the Trie. Return null if the stem does not exist in the Trie
+		 // in the stem, if it exists in the Trie. Return null if the stem does not exist in the Trie 
 		 TrieNode temp = root;
 		 for(int i = 0; i < stem.length(); i++) {
-			 if(temp.getValidNextCharacters().contains(stem.charAt(i))) {
-		    		temp = temp.getChild(stem.charAt(i));
-		    	}
-		    	else {
-		    		return null;
-		    		
-		    	}
+			 if(temp.getChild(stem.charAt(i)) == null) {
+				 return null;
+
+
+			 }
+			 else {
+				 temp = temp.getChild(stem.charAt(i));
+			 }
 		 }
-		 if(temp.endsWord()){
-			 return temp;
-		 }
-		 else {
-			 return null;
-		 }
+		 return temp;
+			 
 	 }
+
 	 /**
 	  * Adds the children nodes to breadth-first search queue.
 	  *
@@ -203,8 +219,8 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 		 for(int i = 0; i < listOfChildren.size(); i++) {
 			 queue.add(parent.getChild(listOfChildren.get(i)));
 		 }
-		 
-		 
+
+
 	 }
 
 
