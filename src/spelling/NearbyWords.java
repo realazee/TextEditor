@@ -125,21 +125,34 @@ public class NearbyWords implements SpellingSuggest {
 		HashSet<String> visited = new HashSet<String>();   // to avoid exploring the same  
 														   // string multiple times
 		List<String> retList = new LinkedList<String>();   // words to return
-		 
+		String curr;
 		
 		// insert first node
 		queue.add(word);
 		visited.add(word);
 					
 		// TODO: Implement the remainder of this method, see assignment for algorithm
-		
+		while(!queue.isEmpty() && retList.size() < numSuggestions && visited.size() < THRESHOLD) {
+			curr = queue.remove(0);
+			List<String> oneAwayFromCurr = distanceOne(curr, false);
+			for(String n :oneAwayFromCurr) {
+				if(!visited.contains(n)) {
+					queue.add(n);
+					visited.add(n);
+					if(dict.isWord(n)) {
+						retList.add(n);
+					}
+				}
+			}
+			
+		}
 		
 		return retList;
 
 	}	
 
    public static void main(String[] args) {
-	   /* basic testing code to get started
+	   // basic testing code to get started
 	   String word = "i";
 	   // Pass NearbyWords any Dictionary implementation you prefer
 	   Dictionary d = new DictionaryHashSet();
@@ -153,7 +166,7 @@ public class NearbyWords implements SpellingSuggest {
 	   List<String> suggest = w.suggestions(word, 10);
 	   System.out.println("Spelling Suggestions for \""+word+"\" are:");
 	   System.out.println(suggest);
-	   */
+	   
    }
 
 }
