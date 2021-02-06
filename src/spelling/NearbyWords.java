@@ -75,8 +75,8 @@ public class NearbyWords implements SpellingSuggest {
 	 * @param wordsOnly controls whether to return only words or any String
 	 * @return
 	 */
-	public void insertions(String s, List<String> currentList, boolean wordsOnly ) {
-		for(int index = 0; index < s.length(); index++){
+	public void insertions(String s, List<String> currentList, boolean wordsOnly) {
+		for(int index = 0; index < s.length() + 1; index++){
 			for(int charCode = (int)'a'; charCode <= (int)'z'; charCode++) {
 			
 				StringBuffer sb = new StringBuffer(s);
@@ -84,7 +84,8 @@ public class NearbyWords implements SpellingSuggest {
 
 			
 				if(!currentList.contains(sb.toString()) && 
-						(!wordsOnly||dict.isWord(sb.toString()))) {
+						(!wordsOnly||dict.isWord(sb.toString())) &&
+						!s.equals(sb.toString())) {
 					currentList.add(sb.toString());
 				}
 			}
@@ -132,7 +133,8 @@ public class NearbyWords implements SpellingSuggest {
 		visited.add(word);
 					
 		// TODO: Implement the remainder of this method, see assignment for algorithm
-		while(!queue.isEmpty() && retList.size() < numSuggestions && visited.size() < THRESHOLD) {
+		int visitedWords = 0;
+		while(!queue.isEmpty() && retList.size() < numSuggestions && visitedWords < THRESHOLD) {
 			curr = queue.remove(0);
 			List<String> oneAwayFromCurr = distanceOne(curr, false);
 			for(String n :oneAwayFromCurr) {
@@ -143,7 +145,9 @@ public class NearbyWords implements SpellingSuggest {
 						retList.add(n);
 					}
 				}
+				
 			}
+			visitedWords++; 
 			
 		}
 		
